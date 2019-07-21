@@ -11,6 +11,7 @@
 #ifndef HUFFMANTREENODE_H
 #define HUFFMANTREENODE_H
 
+#include <iostream>
 #include <string>
 
 using namespace std;
@@ -41,6 +42,14 @@ public:
 	bool operator > (const HuffmanTreeNode &node) const;
 	bool operator >= (const HuffmanTreeNode &node) const;
 	bool operator == (const HuffmanTreeNode &node) const;
+
+	// Desc: Print the code of the current node.
+	void printCode() const;
+
+	// Desc: Print the content of the node.
+	//       Display a (type, weight, code) tuple for nodes of type "tree_node".
+	//       Display a (type, weight, character, code) tuple for nodes of type "char_node".
+	friend ostream &operator << (ostream &os, const HuffmanTreeNode* nodePtr);
 }; // HuffmanTreeNode
 
 #endif

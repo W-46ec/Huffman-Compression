@@ -31,11 +31,8 @@ private:
 	// Desc: Traverse the tree and delete all nodes from the tree.
 	void deleteTree(HuffmanTreeNode *tree);
 
-	// Desc: Print the code of the given character.
-	void printCode(const char &c) const;
-
 	// Desc: Print the Huffman tree.
-	void display(HuffmanTreeNode *tree, bool stem[]) const;
+	void display(HuffmanTreeNode *tree, bool drawBranch[]) const;
 
 public:
 

@@ -8,8 +8,10 @@
  *
  */
 
+#include <iostream>
 #include "HuffmanTreeNode.h"
 
+using namespace std;
 
 // Desc: Default constructor
 HuffmanTreeNode::HuffmanTreeNode() {
@@ -74,5 +76,42 @@ bool HuffmanTreeNode::operator >= (const HuffmanTreeNode &node) const {
 bool HuffmanTreeNode::operator == (const HuffmanTreeNode &node) const {
 	return weight == node.weight;
 } // operator ==
+
+// Desc: Print the code of the current node.
+void HuffmanTreeNode::printCode() const {
+	unsigned pos = 0x1 << (codeLength - 1);
+	for (unsigned i = 0; i < codeLength; i++) {
+		(pos & code) == 0 ? cout << "0" : cout << "1";
+		pos >>= 1;
+	}
+} // printCode
+
+// Desc: Print the content of the node.
+//       Display a (type, weight, code) tuple for nodes of type tree_node.
+//       Display a (type, weight, character) tuple for nodes of type char_node.
+ostream &operator << (ostream &os, const HuffmanTreeNode* nodePtr) {
+	if (nodePtr == NULL) {
+		os << "NULL";
+	} else {
+		unsigned w = nodePtr -> weight;
+		if (nodePtr -> type == tree_node) {	// Tree node
+			os << "(T, " << w << ", \"";
+			nodePtr -> printCode();
+			os << "\")";
+		} else {		// Character node
+			char c = nodePtr -> character;
+			if (c >= 0x20 && c < 0x7F) {	// Printable characters
+				os << "(C, " << w << ", \"" << c << "\", \"";
+				nodePtr -> printCode();
+				os << "\")";
+			} else {	// Non-printable characters
+				os << "C, " << w << ", '.', \"";
+				nodePtr -> printCode();
+				os << "\")";
+			}
+		}
+	}
+	return os;
+} // operator <<
 
 // End of HuffmanTreeNode.cpp

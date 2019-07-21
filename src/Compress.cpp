@@ -45,7 +45,8 @@ int compress(const char *src, const char *dst) {
 	
 	counter.createPriorityQueue(pq);	// Create Priority Queue.
 	HuffmanTree huffTree(pq);			// Create Huffman Tree.
-	// huffTree.display();
+
+	// huffTree.display();	// Test
 
 	in.openFile(src);	// Prepare the source file.
 

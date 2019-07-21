@@ -12,6 +12,7 @@
 #include "HuffmanTreeNode.h"
 
 #include <iostream>
+#include <string>
 
 using namespace std;
 
@@ -55,76 +56,70 @@ void HuffmanTree::deleteTree(HuffmanTreeNode *tree) {
 	tree = NULL;
 } // deleteTree
 
-// Desc: Print the code of the given character.
-void HuffmanTree::printCode(const char &c) const {
-	unsigned length = codeLengthTable[c + 128];
-	unsigned pos = 0x1 << (length - 1);
-	for (unsigned i = 0; i < length; i++) {
-		(pos & codeTable[c + 128]) == 0 ? cout << "0" : cout << "1";
-		pos >>= 1;
-	}
-} // printCode
-
 // Desc: Print the Huffman tree.
-void HuffmanTree::display(HuffmanTreeNode *tree, bool stem[]) const {
-	if (tree == NULL) {		// NULL internel vertex.
+void HuffmanTree::display(HuffmanTreeNode *tree, bool drawBranch[]) const {
+	// NULL internel vertex.
+	if (tree == NULL) {
 		cout << "NULL" << endl;
 		return;
-	}
-	cout << "(";
-	if (tree -> type == tree_node) {
-		cout << "T, " << tree -> weight << ", " << tree -> code;
 	} else {
-		if (tree -> character >= 0x20 && tree -> character < 0x7F) {
-			// Printable characters
-			cout << "C, '" << tree -> character << "', " << tree -> weight << ", \"";
-			printCode(tree -> character);
-			cout << "\"";
-		} else {
-			cout << "C, ..., " << tree -> weight << ", \"";
-			printCode(tree -> character);
-			cout << "\"";
-		}
+		cout << tree << endl;	// Print the content of that node.
 	}
-	cout << ")" << endl;
 
-	// Leaf
+	// Leaf node
 	if (tree -> type == char_node)
 		return;
 
-	unsigned depth = 0;
+	// Different types of branch.
+	string branch1 = " |    ", branch2 = " |----", spaces = "      ";
+
+	// Calculate the level of current node.
+	int level = 0;
 	HuffmanTreeNode *ptr = tree;
 	while (ptr -> parent != NULL) {
-		depth++;
+		level++;
 		ptr = ptr -> parent;
 	}
 
-	// Set the previous "stem" to false if "tree" is the 
-	// left child of its parent. Otherwise, set it to true.
-	if (depth > 0 && tree -> parent -> rChild == tree)
-		stem[depth - 1] = true;
-	else if (depth > 0 && tree -> parent -> lChild == tree)
-		stem[depth - 1] = false;
+	// Set the "drawBranch" of previous level to false if current node
+	// is the left child of its parent. Otherwise, set it to true.
+	if (level > 0 && tree -> parent -> rChild == tree)
+		drawBranch[level - 1] = true;
+	else if (level > 0 && tree -> parent -> lChild == tree)
+		drawBranch[level - 1] = false;
 
-	unsigned i = 0;
-	while (i++ < depth) {
-		if (stem[i - 1])
-			cout << "    |  ";
+	// Display right subtree.
+	int count = 0;
+	while (count++ < level) {
+		if (drawBranch[count - 1])
+			cout << branch1;
 		else
-			cout << "       ";
+			cout << spaces;
 	}
-	cout << "    |--";
-	display(tree -> rChild, stem);
+	cout << branch2;
+	display(tree -> rChild, drawBranch);
 
-	i = 0;
-	while (i++ < depth) {
-		if (stem[i - 1])
-			cout << "    |  ";
+	// Display left subtree.
+	count = 0;
+	while (count++ < level) {
+		if (drawBranch[count - 1])
+			cout << branch1;
 		else
-			cout << "       ";
+			cout << spaces;
 	}
-	cout << "    |--";
-	display(tree -> lChild, stem);
+	cout << branch2;
+	display(tree -> lChild, drawBranch);
+
+	// Draw gaps between siblings.
+	if (level > 0 && tree -> parent -> rChild == tree) {
+		for (int i = 0; i < level - 1; i++) {
+			if (drawBranch[i])
+				cout << branch1;
+			else
+				cout << spaces;
+		}
+		cout << branch1 << endl;
+	}
 } // display
 
 
@@ -185,7 +180,6 @@ HuffmanTreeNode *HuffmanTree::getRoot() const {
 	return root;
 } // getRoot
 
-
 // Desc: Create a Huffman tree using a priority queue.
 // Post: The priority queue is empty.
 void HuffmanTree::createTree(PriorityQueue &pq) {
@@ -235,7 +229,6 @@ void HuffmanTree::createTree(PriorityQueue &pq) {
 	generateCode(root, -1);
 } // createTree
 
-
 // Desc: Move one step from the given starting node.
 //       direction:
 //			Zero --> goto the left child 
@@ -253,11 +246,14 @@ HuffmanTreeNode *HuffmanTree::walk(char direction, HuffmanTreeNode *startNode) c
 // Desc: Print the Huffman tree.
 void HuffmanTree::display() const {
 	int height = getHeight(root);
-	if (height < 0)		// Empty tree
+	if (height < 0) {			// Empty tree
+		cout << "NULL" << endl;
 		return;
-	bool *stem = new bool[height];
-	display(root, stem);
-	delete [] stem;
+	} else {
+		bool *drawBranch = new bool[height];
+		display(root, drawBranch);
+		delete [] drawBranch;
+	}
 } // display
 
 // End of HuffmanTree.cpp
