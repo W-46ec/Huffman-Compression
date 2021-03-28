@@ -21,7 +21,7 @@ A command-line file compression tool implemented in C++. It uses the Huffman alg
   make
   ```
 
-  You will find an executable file called `huff` in the same directory.
+  You will find an executable file called `huff` in the working directory.
 
 
 
