@@ -1,5 +1,5 @@
 # Huffman Compression
-This program uses Huffman algorithm to compress / decompress files.
+A command-line file compression tool implemented in C++. It uses the Huffman algorithm to compress/decompress files.
 
 
 
@@ -7,26 +7,39 @@ This program uses Huffman algorithm to compress / decompress files.
 
 ### Windows
 
-Tested on **Visual Studio 2010**.
+- Tested on **Visual Studio 2010**.
 
 ### Linux
 
-Tested on **Ubuntu 16.04 LTS** using **g++ 7.4.0**.
+- Tested on **Ubuntu 16.04 LTS** with **g++ 7.4.0**.
 
-- Run `make` to compile.
+- **Build Instructions**:
 
-You will find the executable file called `huff` in the same directory.
+  ```bash
+  git clone https://github.com/W-46ec/Huffman-Compression
+  cd ./Huffman-Compression/src/
+  make
+  ```
+
+  You will find an executable file called `huff` in the same directory.
 
 
 
-## Usage
+## Usage Instructions
 
-`./huff --option [source] [destination]` 
+Run `./huff -h` to see options.
 
-Examples: 
+- Compress a file
 
-- Run `./huff -c [source file name] [output file name]` to compress a file.
+  ```bash
+  ./huff -c [source file name] [output file name]
+  ```
 
-- Run `./huff -d [compressed file name] [output file name]` to decompress a file.
+- Decompress a file
 
-- Run `./huff -h` to see help information.
+  ```bash
+  ./huff -d [compressed file name] [output file name]
+  ```
+
+
+
